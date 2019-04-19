@@ -90,10 +90,13 @@ public class GuildGUI {
 
     /**
      * Create the exit button
-     * @param pane the pane to add to-
+     * @param pane the pane to add to
      */
     private void createExitPane(OutlinePane pane) {
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.EXIT_MATERIAL, GuildManageSettings.EXIT_NAME, GuildManageSettings.EXIT_LORE)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.EXIT_MATERIAL, GuildManageSettings.EXIT_NAME, GuildManageSettings.EXIT_LORE), event -> {
+            event.setCancelled(true);
+            event.getWhoClicked().closeInventory();
+        }));
     }
 
     /**
