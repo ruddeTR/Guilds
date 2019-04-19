@@ -1,5 +1,6 @@
 package me.glaremasters.guilds.utils;
 
+import co.aikar.commands.ACFBukkitUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Created by Glare
@@ -53,7 +55,7 @@ public class ItemBuilder {
 
     @NotNull
     public ItemBuilder setLore(@NotNull List<String> lore) {
-        meta.setLore(lore);
+        meta.setLore(lore.stream().map(ACFBukkitUtil::color).collect(Collectors.toList()));
         return this;
     }
 
