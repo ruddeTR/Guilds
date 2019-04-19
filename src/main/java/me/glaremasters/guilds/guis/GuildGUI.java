@@ -4,6 +4,7 @@ import ch.jalu.configme.SettingsManager;
 import co.aikar.commands.ACFBukkitUtil;
 import co.aikar.commands.CommandManager;
 import com.github.stefvanschie.inventoryframework.Gui;
+import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import lombok.AllArgsConstructor;
 import me.glaremasters.guilds.Guilds;
 import me.glaremasters.guilds.configuration.sections.GuildManageSettings;
@@ -24,7 +25,9 @@ public class GuildGUI {
 
     public Gui getGuildGUI() {
 
-        Gui gui = new Gui(guilds, 6, ACFBukkitUtil.color(settingsManager.getProperty(GuildManageSettings.MANAGEMENT_NAME)));
+        Gui gui = new Gui(guilds, 1, ACFBukkitUtil.color(settingsManager.getProperty(GuildManageSettings.MANAGEMENT_NAME)));
+
+        StaticPane pane = new StaticPane(0, 0, 9 ,1);
 
         return gui;
     }
