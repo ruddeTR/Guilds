@@ -1,6 +1,7 @@
 package me.glaremasters.guilds.guis;
 
 import ch.jalu.configme.SettingsManager;
+import ch.jalu.configme.properties.Property;
 import co.aikar.commands.ACFBukkitUtil;
 import co.aikar.commands.CommandManager;
 import com.github.stefvanschie.inventoryframework.Gui;
@@ -55,6 +56,10 @@ public class GuildGUI {
         return gui;
     }
 
+    /**
+     * Create the background panes
+     * @param pane the pane to add to
+     */
     private void createPanes(OutlinePane pane) {
         ItemBuilder builder = new ItemBuilder(new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7));
         for (int i = 0; i < 27; i++) {
@@ -62,27 +67,46 @@ public class GuildGUI {
         }
     }
 
+    /**
+     * Create the center pane for the gui
+     * @param pane the pane to add to
+     */
     private void createCenter(OutlinePane pane) {
         ItemBuilder builder = new ItemBuilder(new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 8));
         pane.addItem(new GuiItem(builder.build(), event -> event.setCancelled(true)));
     }
 
+    /**
+     * Create the normal manage pane
+     * @param pane the pane to add to
+     */
     private void createNormalPane(OutlinePane pane) {
-        pane.addItem(new GuiItem(quickItem(settingsManager.getProperty(GuildManageSettings.MEMBERS_MATERIAL), settingsManager.getProperty(GuildManageSettings.MEMBERS_NAME), settingsManager.getProperty(GuildManageSettings.MEMBERS_LORE))));
-        pane.addItem(new GuiItem(quickItem(settingsManager.getProperty(GuildManageSettings.STATUS_MATERIAL), settingsManager.getProperty(GuildManageSettings.STATUS_NAME), settingsManager.getProperty(GuildManageSettings.STATUS_LORE))));
-        pane.addItem(new GuiItem(quickItem("", "", new ArrayList<>())));
-        pane.addItem(new GuiItem(quickItem(settingsManager.getProperty(GuildManageSettings.UPGRADE_MATERIAL), settingsManager.getProperty(GuildManageSettings.UPGRADE_NAME), settingsManager.getProperty(GuildManageSettings.UPGRADE_LORE))));
-        pane.addItem(new GuiItem(quickItem(settingsManager.getProperty(GuildManageSettings.CODES_MATERIAL), settingsManager.getProperty(GuildManageSettings.CODES_NAME), settingsManager.getProperty(GuildManageSettings.CODES_LORE))));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.MEMBERS_MATERIAL, GuildManageSettings.MEMBERS_NAME, GuildManageSettings.MEMBERS_LORE)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.STATUS_MATERIAL, GuildManageSettings.STATUS_NAME, GuildManageSettings.STATUS_LORE)));
+        pane.addItem(new GuiItem(new ItemStack(Material.AIR)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.UPGRADE_MATERIAL, GuildManageSettings.UPGRADE_NAME, GuildManageSettings.UPGRADE_LORE)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.CODES_MATERIAL, GuildManageSettings.CODES_NAME, GuildManageSettings.CODES_LORE)));
     }
 
+    /**
+     * Create the exit button
+     * @param pane the pane to add to-
+     */
     private void createExitPane(OutlinePane pane) {
-        pane.addItem(new GuiItem(quickItem(settingsManager.getProperty(GuildManageSettings.EXIT_MATERIAL), settingsManager.getProperty(GuildManageSettings.EXIT_NAME), settingsManager.getProperty(GuildManageSettings.EXIT_LORE))));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.EXIT_MATERIAL, GuildManageSettings.EXIT_NAME, GuildManageSettings.EXIT_LORE)));
     }
 
-    private ItemStack quickItem(String material, String name, List<String> lore) {
-        ItemBuilder builder = new ItemBuilder(SkullUtils.getSkull(SkullUtils.getEncoded("https://textures.minecraft.net/texture/" + material)));
-        builder.setName(ACFBukkitUtil.color(name));
-        builder.setLore(lore);
+    /**
+     * Create items based off base64 codes
+     * @param material the base64 code
+     * @param name the name of the skull
+     * @param lore the lore of the skull
+     * @return created itemstack
+     */
+    private ItemStack quickItem(Property<String> material, Property<String> name, Property<List<String>> lore) {
+        ItemBuilder builder = new ItemBuilder(SkullUtils.getSkull(SkullUtils.getEncoded("https://textures.minecraft.net/texture/" + settingsManager.getProperty(material))));
+        builder.setName(ACFBukkitUtil.color(settingsManager.getProperty(name)));
+        builder.setLore(settingsManager.getProperty(lore));
         return builder.build();
     }
 
