@@ -1,7 +1,7 @@
 package me.glaremasters.guilds.configuration.sections;
 
-import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
+import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
 
 import java.util.List;
@@ -67,4 +67,13 @@ public class GuildManageSettings implements SettingsHolder {
             newListProperty(MANAGEMENT_PATH + "exit.lore", " &c&l&oClose ", "");
 
 
+    @Override
+    public void registerComments(CommentsConfiguration conf) {
+        String[] pluginHeader = {
+                "This section of the config handles the overall guild management gui settings.",
+                "This gui is used as an alternative to some commands such as managing members",
+                "and creating guild codes, toggling status, etc!"
+        };
+        conf.setComment("guis.guild-management", pluginHeader);
+    }
 }
