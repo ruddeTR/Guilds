@@ -11,10 +11,13 @@ import com.github.stefvanschie.inventoryframework.pane.Pane;
 import lombok.AllArgsConstructor;
 import me.glaremasters.guilds.Guilds;
 import me.glaremasters.guilds.configuration.sections.GuildManageSettings;
+import me.glaremasters.guilds.guild.Guild;
 import me.glaremasters.guilds.guild.GuildHandler;
+import me.glaremasters.guilds.messages.Messages;
 import me.glaremasters.guilds.utils.ItemBuilder;
 import me.glaremasters.guilds.utils.SkullUtils;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -82,7 +85,12 @@ public class GuildGUI {
      */
     private void createNormalPane(OutlinePane pane) {
         pane.addItem(new GuiItem(quickItem(GuildManageSettings.MEMBERS_MATERIAL, GuildManageSettings.MEMBERS_NAME, GuildManageSettings.MEMBERS_LORE)));
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.STATUS_MATERIAL, GuildManageSettings.STATUS_NAME, GuildManageSettings.STATUS_LORE)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.STATUS_MATERIAL, GuildManageSettings.STATUS_NAME, GuildManageSettings.STATUS_LORE), event -> {
+            event.setCancelled(true);
+            Guild guild = guildHandler.getGuild((Player) event.getWhoClicked());
+            guild.toggleStatus();
+            commandManager.getCommandIssuer(event.getWhoClicked()).sendInfo(Messages.STATUS__SUCCESSFUL, "{status}", guild.getStatus().name());
+        }));
         pane.addItem(new GuiItem(new ItemStack(Material.AIR)));
         pane.addItem(new GuiItem(quickItem(GuildManageSettings.UPGRADE_MATERIAL, GuildManageSettings.UPGRADE_NAME, GuildManageSettings.UPGRADE_LORE)));
         pane.addItem(new GuiItem(quickItem(GuildManageSettings.CODES_MATERIAL, GuildManageSettings.CODES_NAME, GuildManageSettings.CODES_LORE)));
