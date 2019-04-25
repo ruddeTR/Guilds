@@ -17,11 +17,10 @@ import me.glaremasters.guilds.messages.Messages;
 import me.glaremasters.guilds.utils.ItemBuilder;
 import me.glaremasters.guilds.utils.SkullUtils;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Glare
@@ -36,7 +35,7 @@ public class GuildGUI {
     private GuildHandler guildHandler;
     private CommandManager commandManager;
 
-    public Gui getGuildGUI() {
+    public Gui getGuildGUI(Guild guild) {
 
         Gui gui = new Gui(guilds, 3, ACFBukkitUtil.color(settingsManager.getProperty(GuildManageSettings.MANAGEMENT_NAME)));
 
@@ -46,9 +45,9 @@ public class GuildGUI {
         OutlinePane exitPane = new OutlinePane(8, 2, 1, 1, Pane.Priority.HIGH);
 
         createPanes(backgroundPane);
-        createNormalPane(foregroundPane);
+        createNormalPane(foregroundPane, guild);
         createCenter(middlePane);
-        createExitPane(exitPane);
+        createExitPane(exitPane, guild);
 
         gui.addPane(backgroundPane);
         gui.addPane(foregroundPane);
@@ -83,25 +82,24 @@ public class GuildGUI {
      * Create the normal manage pane
      * @param pane the pane to add to
      */
-    private void createNormalPane(OutlinePane pane) {
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.MEMBERS_MATERIAL, GuildManageSettings.MEMBERS_NAME, GuildManageSettings.MEMBERS_LORE)));
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.STATUS_MATERIAL, GuildManageSettings.STATUS_NAME, GuildManageSettings.STATUS_LORE), event -> {
+    private void createNormalPane(OutlinePane pane, Guild guild) {
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.MEMBERS_MATERIAL, GuildManageSettings.MEMBERS_NAME, GuildManageSettings.MEMBERS_LORE, guild)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.STATUS_MATERIAL, GuildManageSettings.STATUS_NAME, GuildManageSettings.STATUS_LORE, guild), event -> {
             event.setCancelled(true);
-            Guild guild = guildHandler.getGuild((Player) event.getWhoClicked());
             guild.toggleStatus();
             commandManager.getCommandIssuer(event.getWhoClicked()).sendInfo(Messages.STATUS__SUCCESSFUL, "{status}", guild.getStatus().name());
         }));
         pane.addItem(new GuiItem(new ItemStack(Material.AIR)));
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.UPGRADE_MATERIAL, GuildManageSettings.UPGRADE_NAME, GuildManageSettings.UPGRADE_LORE)));
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.CODES_MATERIAL, GuildManageSettings.CODES_NAME, GuildManageSettings.CODES_LORE)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.UPGRADE_MATERIAL, GuildManageSettings.UPGRADE_NAME, GuildManageSettings.UPGRADE_LORE, guild)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.CODES_MATERIAL, GuildManageSettings.CODES_NAME, GuildManageSettings.CODES_LORE, guild)));
     }
 
     /**
      * Create the exit button
      * @param pane the pane to add to
      */
-    private void createExitPane(OutlinePane pane) {
-        pane.addItem(new GuiItem(quickItem(GuildManageSettings.EXIT_MATERIAL, GuildManageSettings.EXIT_NAME, GuildManageSettings.EXIT_LORE), event -> {
+    private void createExitPane(OutlinePane pane, Guild guild) {
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.EXIT_MATERIAL, GuildManageSettings.EXIT_NAME, GuildManageSettings.EXIT_LORE, guild), event -> {
             event.setCancelled(true);
             event.getWhoClicked().closeInventory();
         }));
@@ -114,10 +112,10 @@ public class GuildGUI {
      * @param lore the lore of the skull
      * @return created itemstack
      */
-    private ItemStack quickItem(Property<String> material, Property<String> name, Property<List<String>> lore) {
+    private ItemStack quickItem(Property<String> material, Property<String> name, Property<List<String>> lore, Guild guild) {
         ItemBuilder builder = new ItemBuilder(SkullUtils.getSkull(SkullUtils.getEncoded("https://textures.minecraft.net/texture/" + settingsManager.getProperty(material))));
         builder.setName(ACFBukkitUtil.color(settingsManager.getProperty(name)));
-        builder.setLore(settingsManager.getProperty(lore));
+        builder.setLore(settingsManager.getProperty(lore).stream().map(l -> l.replace("{status}", guild.getStatus().name())).collect(Collectors.toList()));
         return builder.build();
     }
 

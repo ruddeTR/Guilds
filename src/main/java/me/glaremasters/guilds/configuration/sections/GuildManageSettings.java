@@ -37,7 +37,7 @@ public class GuildManageSettings implements SettingsHolder {
             newProperty(MANAGEMENT_PATH + "status.name", "&r");
 
     public static final Property<List<String>> STATUS_LORE =
-            newListProperty(MANAGEMENT_PATH + "status.lore", " &f&l> &a&lToggle Status &f&l< ", "", "&8 • &7Toggle the Status of your Guild ", "");
+            newListProperty(MANAGEMENT_PATH + "status.lore", " &f&l> &a&lToggle Status &f&l< ", "", "&8 • &7Toggle the Status of your Guild ", "&8 • &7Current Status: &a&l{status}", "");
 
     public static final Property<String> UPGRADE_MATERIAL =
             newProperty(MANAGEMENT_PATH + "upgrade.material", "cb45c5eb78dff6fc43f7f8e398729414422a8eb6f314505df8ff9a33bdd6d12f");

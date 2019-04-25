@@ -27,7 +27,7 @@ public class CommandManage extends BaseCommand {
     @Description("{@@descriptions.manage}")
     @CommandPermission(Constants.BASE_PERM + "manage")
     public void execute(Player player, Guild guild) {
-        guilds.getGuildGUI().getGuildGUI().show(player);
+        guilds.getGuildGUI().getGuildGUI(guild).show(player);
     }
 
 }
