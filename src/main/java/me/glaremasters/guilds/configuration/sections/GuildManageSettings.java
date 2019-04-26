@@ -39,6 +39,15 @@ public class GuildManageSettings implements SettingsHolder {
     public static final Property<List<String>> STATUS_LORE =
             newListProperty(MANAGEMENT_PATH + "status.lore", " &f&l> &a&lToggle Status &f&l< ", "", "&8 • &7Toggle the Status of your Guild ", "&8 • &7Current Status: &a&l{status}", "");
 
+    public static final Property<String> BANK_MATERIAL =
+            newProperty(MANAGEMENT_PATH + "bank.material", "198df42f477f213ff5e9d7fa5a4cc4a69f20d9cef2b90c4ae4f29bd17287b5");
+
+    public static final Property<String> BANK_NAME =
+            newProperty(MANAGEMENT_PATH + "bank.name", "&r");
+
+    public static final Property<List<String>> BANK_LORE =
+            newListProperty(MANAGEMENT_PATH + "bank.lore", " &f&l> &a&lManage Bank &f&l< ", "", "&8 • &7See information about your bank ", "&8 • &7Current Balance: &a&l{balance}", "");
+
     public static final Property<String> UPGRADE_MATERIAL =
             newProperty(MANAGEMENT_PATH + "upgrade.material", "cb45c5eb78dff6fc43f7f8e398729414422a8eb6f314505df8ff9a33bdd6d12f");
 

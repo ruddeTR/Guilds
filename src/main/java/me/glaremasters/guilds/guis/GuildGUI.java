@@ -41,17 +41,14 @@ public class GuildGUI {
 
         OutlinePane backgroundPane = new OutlinePane(0, 0, 9, 3, Pane.Priority.LOW);
         OutlinePane foregroundPane = new OutlinePane(2, 1, 5, 1,  Pane.Priority.NORMAL);
-        OutlinePane middlePane = new OutlinePane(4, 1, 1, 1, Pane.Priority.HIGH);
         OutlinePane exitPane = new OutlinePane(8, 2, 1, 1, Pane.Priority.HIGH);
 
         createPanes(backgroundPane);
         createNormalPane(foregroundPane, guild);
-        createCenter(middlePane);
         createExitPane(exitPane, guild);
 
         gui.addPane(backgroundPane);
         gui.addPane(foregroundPane);
-        gui.addPane(middlePane);
         gui.addPane(exitPane);
 
 
@@ -70,15 +67,6 @@ public class GuildGUI {
     }
 
     /**
-     * Create the center pane for the gui
-     * @param pane the pane to add to
-     */
-    private void createCenter(OutlinePane pane) {
-        ItemBuilder builder = new ItemBuilder(new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 8));
-        pane.addItem(new GuiItem(builder.build(), event -> event.setCancelled(true)));
-    }
-
-    /**
      * Create the normal manage pane
      * @param pane the pane to add to
      */
@@ -89,7 +77,7 @@ public class GuildGUI {
             guild.toggleStatus();
             commandManager.getCommandIssuer(event.getWhoClicked()).sendInfo(Messages.STATUS__SUCCESSFUL, "{status}", guild.getStatus().name());
         }));
-        pane.addItem(new GuiItem(new ItemStack(Material.AIR)));
+        pane.addItem(new GuiItem(quickItem(GuildManageSettings.BANK_MATERIAL, GuildManageSettings.BANK_NAME, GuildManageSettings.BANK_LORE, guild)));
         pane.addItem(new GuiItem(quickItem(GuildManageSettings.UPGRADE_MATERIAL, GuildManageSettings.UPGRADE_NAME, GuildManageSettings.UPGRADE_LORE, guild)));
         pane.addItem(new GuiItem(quickItem(GuildManageSettings.CODES_MATERIAL, GuildManageSettings.CODES_NAME, GuildManageSettings.CODES_LORE, guild)));
     }
