@@ -26,19 +26,13 @@ package me.glaremasters.guilds.guild;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import me.glaremasters.guilds.utils.SkullUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -53,6 +47,11 @@ public class GuildSkull {
 
     public GuildSkull(Player player) {
         serialized = SkullUtils.getEncoded(getTextureUrl(player.getUniqueId()));
+        itemStack = SkullUtils.getSkull(serialized);
+    }
+
+    public GuildSkull(String texture) {
+        serialized = SkullUtils.getEncoded("https://textures.minecraft.net/texture/" + texture);
         itemStack = SkullUtils.getSkull(serialized);
     }
 
