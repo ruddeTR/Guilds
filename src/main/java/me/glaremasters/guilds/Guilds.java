@@ -93,6 +93,7 @@ import me.glaremasters.guilds.configuration.GuildConfigurationBuilder;
 import me.glaremasters.guilds.configuration.sections.HooksSettings;
 import me.glaremasters.guilds.configuration.sections.PluginSettings;
 import me.glaremasters.guilds.database.DatabaseProvider;
+import me.glaremasters.guilds.database.Queries;
 import me.glaremasters.guilds.database.migration.MigrationManager;
 import me.glaremasters.guilds.database.providers.JsonProvider;
 import me.glaremasters.guilds.database.providers.MysqlProvider;
@@ -131,6 +132,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -624,9 +626,14 @@ public final class Guilds extends JavaPlugin {
                 databaseProvider = new JsonProvider(getDataFolder(), this);
                 break;
             case "mysql":
-                db = BukkitDB.createHikariDatabase(this, settingsManager.getProperty(PluginSettings.SQL_HOST),
-                        settingsManager.getProperty(PluginSettings.SQL_USER), settingsManager.getProperty(PluginSettings.SQL_PASS),
-                        settingsManager.getProperty(PluginSettings.SQL_DB));
+                db = BukkitDB.createHikariDatabase(this, settingsManager.getProperty(PluginSettings.SQL_USER),
+                        settingsManager.getProperty(PluginSettings.SQL_PASS), settingsManager.getProperty(PluginSettings.SQL_DB),
+                        settingsManager.getProperty(PluginSettings.SQL_HOST));
+                try {
+                    db.executeUpdate(Queries.CREATE_GUILDS_TABLE);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 databaseProvider = new MysqlProvider();
                 break;
             default:

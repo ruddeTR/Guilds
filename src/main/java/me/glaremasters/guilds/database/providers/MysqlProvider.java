@@ -4,6 +4,7 @@ import me.glaremasters.guilds.database.DatabaseProvider;
 import me.glaremasters.guilds.guild.Guild;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,8 @@ public class MysqlProvider implements DatabaseProvider {
 
     @Override
     public List<Guild> loadGuilds() throws IOException {
-        return null;
+        List<Guild> loadedGuilds = new ArrayList<>();
+        return loadedGuilds;
     }
 
     @Override
