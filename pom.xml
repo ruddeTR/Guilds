@@ -30,7 +30,7 @@
 
     <groupId>me.glaremasters</groupId>
     <artifactId>guilds</artifactId>
-    <version>3.4.2-RELEASE</version>
+    <version>3.4.3-BETA</version>
     <packaging>jar</packaging>
 
     <name>Guilds</name>
@@ -102,6 +102,10 @@
                                 <relocation>
                                     <pattern>co.aikar.commands</pattern>
                                     <shadedPattern>me.glaremasters.guilds.libs.acf</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>co.aikar.idb</pattern>
+                                    <shadedPattern>me.glaremasters.guilds.listeners.idb</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -274,5 +278,25 @@
             <version>1.3.2</version>
         </dependency>
 
+        <!-- HikariCP Wrapper -->
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>idb-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Used to help with bukkit stuff -->
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>idb-bukkit</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Used for MySQL storage -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.4.1</version>
+        </dependency>
     </dependencies>
 </project>

@@ -67,6 +67,26 @@ public final class PluginSettings implements SettingsHolder {
     public static final Property<Boolean> UPDATE_CHECK =
             newProperty("settings.update-check", true);
 
+    @Comment("Which type or storage would you like to use? MySQL or JSON?")
+    public static final Property<String> STORAGE_TYPE =
+            newProperty("settings.storage-type", "json");
+
+    @Comment("What is the IP / Host for the database?")
+    public static final Property<String> SQL_HOST =
+            newProperty("settings.mysql.host", "");
+
+    @Comment("What is the username for the database?")
+    public static final Property<String> SQL_USER =
+            newProperty("settings.mysql.user", "");
+
+    @Comment("What is the password for the database?")
+    public static final Property<String> SQL_PASS =
+            newProperty("settings.mysql.pass", "");
+
+    @Comment("What is the name of the database?")
+    public static final Property<String> SQL_DB =
+            newProperty("settings.mysql.database", "");
+
     private PluginSettings() {
     }
 

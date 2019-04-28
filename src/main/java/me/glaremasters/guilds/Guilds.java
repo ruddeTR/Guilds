@@ -30,6 +30,8 @@ import ch.jalu.configme.migration.PlainMigrationService;
 import co.aikar.commands.ACFBukkitUtil;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
+import co.aikar.idb.BukkitDB;
+import co.aikar.idb.Database;
 import lombok.Getter;
 import me.glaremasters.guilds.actions.ActionHandler;
 import me.glaremasters.guilds.api.GuildsAPI;
@@ -93,6 +95,7 @@ import me.glaremasters.guilds.configuration.sections.PluginSettings;
 import me.glaremasters.guilds.database.DatabaseProvider;
 import me.glaremasters.guilds.database.migration.MigrationManager;
 import me.glaremasters.guilds.database.providers.JsonProvider;
+import me.glaremasters.guilds.database.providers.MysqlProvider;
 import me.glaremasters.guilds.guild.Guild;
 import me.glaremasters.guilds.guild.GuildCode;
 import me.glaremasters.guilds.guild.GuildHandler;
@@ -146,7 +149,8 @@ public final class Guilds extends JavaPlugin {
     @Getter
     private static GuildsAPI api;
     private GuildHandler guildHandler;
-    private DatabaseProvider database;
+    @Getter private Database db;
+    private DatabaseProvider databaseProvider;
     private SettingsManager settingsManager;
     private PaperCommandManager commandManager;
     private ActionHandler actionHandler;
@@ -337,9 +341,9 @@ public final class Guilds extends JavaPlugin {
             info("Loading Data..");
             // This will soon be changed to an automatic storage chooser from the config
             // Load the json provider
-            database = new JsonProvider(getDataFolder(), this);
+            chooseDatabase();
             // Load guildhandler with provider
-            guildHandler = new GuildHandler(database, getCommandManager(), getPermissions(), getConfig());
+            guildHandler = new GuildHandler(databaseProvider, getCommandManager(), getPermissions(), getConfig());
             info("Loaded data!");
         } catch (IOException e) {
             severe("An error occured loading data! Stopping plugin..");
@@ -609,6 +613,26 @@ public final class Guilds extends JavaPlugin {
             announcement = "Could not fetch announcements!";
         }
         return announcement;
+    }
+
+    /**
+     * Used to choose which type of storage to use for the plugin
+     */
+    private void chooseDatabase() {
+        switch (settingsManager.getProperty(PluginSettings.STORAGE_TYPE).toLowerCase()) {
+            case "json":
+                databaseProvider = new JsonProvider(getDataFolder(), this);
+                break;
+            case "mysql":
+                db = BukkitDB.createHikariDatabase(this, settingsManager.getProperty(PluginSettings.SQL_HOST),
+                        settingsManager.getProperty(PluginSettings.SQL_USER), settingsManager.getProperty(PluginSettings.SQL_PASS),
+                        settingsManager.getProperty(PluginSettings.SQL_DB));
+                databaseProvider = new MysqlProvider();
+                break;
+            default:
+                databaseProvider = new JsonProvider(getDataFolder(), this);
+                break;
+        }
     }
 
 }
