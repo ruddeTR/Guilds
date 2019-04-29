@@ -30,7 +30,6 @@ import ch.jalu.configme.migration.PlainMigrationService;
 import co.aikar.commands.ACFBukkitUtil;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
-import co.aikar.idb.BukkitDB;
 import co.aikar.idb.Database;
 import lombok.Getter;
 import me.glaremasters.guilds.actions.ActionHandler;
@@ -113,6 +112,7 @@ import me.glaremasters.guilds.messages.Messages;
 import me.glaremasters.guilds.placeholders.PlaceholderAPI;
 import me.glaremasters.guilds.updater.UpdateChecker;
 import me.glaremasters.guilds.utils.Constants;
+import me.glaremasters.guilds.utils.MySQLUtils;
 import me.glaremasters.guilds.utils.StringUtils;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -173,6 +173,9 @@ public final class Guilds extends JavaPlugin {
                 guildHandler.saveData();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            finally {
+                db.close();
             }
             guildHandler.chatLogout();
         }
@@ -626,7 +629,7 @@ public final class Guilds extends JavaPlugin {
                 databaseProvider = new JsonProvider(getDataFolder(), this);
                 break;
             case "mysql":
-                db = BukkitDB.createHikariDatabase(this, settingsManager.getProperty(PluginSettings.SQL_USER),
+                db = MySQLUtils.createHikariDatabase(this, settingsManager.getProperty(PluginSettings.SQL_USER),
                         settingsManager.getProperty(PluginSettings.SQL_PASS), settingsManager.getProperty(PluginSettings.SQL_DB),
                         settingsManager.getProperty(PluginSettings.SQL_HOST));
                 try {
@@ -634,7 +637,7 @@ public final class Guilds extends JavaPlugin {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                databaseProvider = new MysqlProvider();
+                databaseProvider = new MysqlProvider(this);
                 break;
             default:
                 databaseProvider = new JsonProvider(getDataFolder(), this);

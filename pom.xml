@@ -285,13 +285,6 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- Used to help with bukkit stuff -->
-        <dependency>
-            <groupId>co.aikar</groupId>
-            <artifactId>idb-bukkit</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-
         <!-- Used for MySQL storage -->
         <dependency>
             <groupId>com.zaxxer</groupId>
