@@ -105,7 +105,11 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>co.aikar.idb</pattern>
-                                    <shadedPattern>me.glaremasters.guilds.listeners.idb</shadedPattern>
+                                    <shadedPattern>me.glaremasters.guilds.libs.idb</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>co.aikar.taskchain</pattern>
+                                    <shadedPattern>me.glaremasters.guild.libs.taskchain</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

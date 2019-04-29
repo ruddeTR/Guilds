@@ -6,12 +6,16 @@ import co.aikar.idb.DatabaseOptions;
 import co.aikar.idb.HikariPooledDatabase;
 import co.aikar.idb.PooledDatabaseOptions;
 import lombok.NonNull;
+import me.glaremasters.guilds.Guilds;
+import me.glaremasters.guilds.database.Queries;
 import me.glaremasters.guilds.guild.Guild;
 import me.glaremasters.guilds.guild.GuildCode;
 import me.glaremasters.guilds.guild.GuildHome;
 import me.glaremasters.guilds.guild.GuildMember;
 import org.bukkit.plugin.Plugin;
+import org.yaml.snakeyaml.scanner.Constant;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 /**
@@ -67,6 +71,26 @@ public class MySQLUtils {
             DB.setGlobalDatabase(db);
         }
         return db;
+    }
+
+    /**
+     * Create all the database tables on first run
+     * @param database the database to add the tables to
+     */
+    public static void createAllTables(Database database) {
+        Guilds.newChain().sync(() -> {
+            try {
+                database.executeUpdate(Queries.CREATE_TABLE_GUILDS);
+                database.executeUpdate(Queries.CREATE_TABLE_MEMBERS);
+                database.executeUpdate(Queries.CREATE_TABLE_PENDING_MEMBERS);
+                database.executeUpdate(Queries.CREATE_TABLE_ALLIES);
+                database.executeUpdate(Queries.CREATE_TABLE_PENDING_ALLIES);
+                database.executeUpdate(Queries.CREATE_TABLE_CODES);
+                database.executeUpdate(Queries.CREATE_TABLE_VAULTS);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).execute();
     }
 
     /**

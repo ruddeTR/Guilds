@@ -31,6 +31,9 @@ import co.aikar.commands.ACFBukkitUtil;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.idb.Database;
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 import lombok.Getter;
 import me.glaremasters.guilds.actions.ActionHandler;
 import me.glaremasters.guilds.api.GuildsAPI;
@@ -92,10 +95,9 @@ import me.glaremasters.guilds.configuration.GuildConfigurationBuilder;
 import me.glaremasters.guilds.configuration.sections.HooksSettings;
 import me.glaremasters.guilds.configuration.sections.PluginSettings;
 import me.glaremasters.guilds.database.DatabaseProvider;
-import me.glaremasters.guilds.database.Queries;
 import me.glaremasters.guilds.database.migration.MigrationManager;
 import me.glaremasters.guilds.database.providers.JsonProvider;
-import me.glaremasters.guilds.database.providers.MysqlProvider;
+import me.glaremasters.guilds.database.providers.MySqlProvider;
 import me.glaremasters.guilds.guild.Guild;
 import me.glaremasters.guilds.guild.GuildCode;
 import me.glaremasters.guilds.guild.GuildHandler;
@@ -132,7 +134,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -152,6 +153,7 @@ public final class Guilds extends JavaPlugin {
     private static GuildsAPI api;
     private GuildHandler guildHandler;
     @Getter private Database db;
+    private static TaskChainFactory taskChainFactory;
     private DatabaseProvider databaseProvider;
     private SettingsManager settingsManager;
     private PaperCommandManager commandManager;
@@ -632,18 +634,33 @@ public final class Guilds extends JavaPlugin {
                 db = MySQLUtils.createHikariDatabase(this, settingsManager.getProperty(PluginSettings.SQL_USER),
                         settingsManager.getProperty(PluginSettings.SQL_PASS), settingsManager.getProperty(PluginSettings.SQL_DB),
                         settingsManager.getProperty(PluginSettings.SQL_HOST));
-                try {
-                    /*db.executeUpdate(Queries.CREATE_GUILDS_TABLE);*/
-                    db.executeUpdate(Queries.CREATE_TABLE_MEMBERS);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                databaseProvider = new MysqlProvider(this);
+                taskChainFactory = BukkitTaskChainFactory.create(this);
+                MySQLUtils.createAllTables(db);
+                databaseProvider = new MySqlProvider(this);
                 break;
             default:
                 databaseProvider = new JsonProvider(getDataFolder(), this);
                 break;
         }
+    }
+
+    /**
+     * Used to create a new chain of commands
+     * @param <T> the type
+     * @return chain
+     */
+    public static <T> TaskChain<T> newChain() {
+        return taskChainFactory.newChain();
+    }
+
+    /**
+     * Used to create new shared chain of commands
+     * @param name the name of the chain
+     * @param <T> the type of chain
+     * @return shared chain
+     */
+    public static <T> TaskChain<T> newSharedChain(String name) {
+        return taskChainFactory.newSharedChain(name);
     }
 
 }

@@ -18,7 +18,7 @@ import java.util.List;
  * Time: 5:17 PM
  */
 @AllArgsConstructor
-public class MysqlProvider implements DatabaseProvider {
+public class MySqlProvider implements DatabaseProvider {
 
     private Guilds guilds;
 
@@ -31,7 +31,7 @@ public class MysqlProvider implements DatabaseProvider {
     @Override
     public void saveGuilds(List<Guild> guilds) throws IOException {
 
-        for (Guild guild : guilds) {
+/*        for (Guild guild : guilds) {
             try {
                 this.guilds.getDb().executeInsert(Queries.ADD_NEW_GUILD, guild.getId().toString(), guild.getName(),
                         guild.getPrefix(), guild.getGuildMaster().getUuid().toString(), MySQLUtils.stringHome(guild),
@@ -42,7 +42,7 @@ public class MysqlProvider implements DatabaseProvider {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
     }
 }
