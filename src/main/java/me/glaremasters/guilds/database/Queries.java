@@ -55,7 +55,7 @@ public class Queries {
     @Language("MySQL")
     public static final String CREATE_TABLE_CODES = "CREATE TABLE IF NOT EXISTS `guild_codes`\n" +
             "(\n" +
-            "  `code` TEXT UNIQUE PRIMARY KEY NOT NULL,\n" +
+            "  `code` varchar(100) UNIQUE PRIMARY KEY NOT NULL,\n" +
             "  `uses` integer(10) NOT NULL,\n" +
             "  `creator` varchar(36) NOT NULL,\n" +
             "  `redeemers` TEXT\n" +
