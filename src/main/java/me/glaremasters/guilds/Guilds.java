@@ -633,7 +633,8 @@ public final class Guilds extends JavaPlugin {
                         settingsManager.getProperty(PluginSettings.SQL_PASS), settingsManager.getProperty(PluginSettings.SQL_DB),
                         settingsManager.getProperty(PluginSettings.SQL_HOST));
                 try {
-                    db.executeUpdate(Queries.CREATE_GUILDS_TABLE);
+                    /*db.executeUpdate(Queries.CREATE_GUILDS_TABLE);*/
+                    db.executeUpdate(Queries.CREATE_TABLE_MEMBERS);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
