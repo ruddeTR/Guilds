@@ -6,7 +6,13 @@ import co.aikar.idb.DatabaseOptions;
 import co.aikar.idb.HikariPooledDatabase;
 import co.aikar.idb.PooledDatabaseOptions;
 import lombok.NonNull;
+import me.glaremasters.guilds.guild.Guild;
+import me.glaremasters.guilds.guild.GuildCode;
+import me.glaremasters.guilds.guild.GuildHome;
+import me.glaremasters.guilds.guild.GuildMember;
 import org.bukkit.plugin.Plugin;
+
+import java.util.UUID;
 
 /**
  * MIT License
@@ -31,6 +37,7 @@ import org.bukkit.plugin.Plugin;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//todo Clean this entire class up when you're not dead-ass tired
 public class MySQLUtils {
 
     public static PooledDatabaseOptions getRecommendedOptions(Plugin plugin, @NonNull String user, @NonNull String pass, @NonNull String db, @NonNull String hostAndPort) {
@@ -60,5 +67,106 @@ public class MySQLUtils {
             DB.setGlobalDatabase(db);
         }
         return db;
+    }
+
+    /**
+     * Turn the GuildHome into a string
+     * @param guild the guild of the guild home
+     * @return the guildhome as a string
+     */
+    public static String stringHome(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            GuildHome home = guild.getHome();
+            sb.append(home.getWorld() + ":" + home.getX() + ":" + home.getY() + ":" + home.getZ() + ":" + home.getYaw() + ":" + home.getPitch());
+        } catch (NullPointerException ex) {
+            sb.append("");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Put all the members of a guild to a string
+     * @param guild the guild to string members to
+     * @return string of members
+     */
+    public static String stringMembers(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        for (GuildMember member : guild.getMembers()) {
+            sb.append(member.getUuid().toString() + "," + member.getRole().getLevel() + "//");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Put all the invited members to a string
+     * @param guild the guild to string pending members to
+     * @return string of pending members
+     */
+    public static String stringPendingMembers(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        for (UUID uuid : guild.getInvitedMembers()) {
+            sb.append(uuid.toString() + "//");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Put all allies into a string
+     * @param guild the guild to string allies to
+     * @return string of allies
+     */
+    public static String stringAllies(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        for (UUID uuid : guild.getAllies()) {
+            sb.append(uuid.toString() + "//");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Put all pending allies into a string
+     * @param guild the guild to string pending allies to
+     * @return string of pending allies
+     */
+    public static String stringPendingAllies(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        for (UUID uuid : guild.getPendingAllies()) {
+            sb.append(uuid.toString() + "//");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Turn the guild codes into a string
+     * @param guild the guild of the codes
+     * @return the codes as as a string
+     */
+    public static String stringGuildCodes(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        for (GuildCode code : guild.getCodes()) {
+            sb.append(code.getId() + "," + code.getUses() + "," + code.getRedeemers().toString());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Turn the guild vaults into a string
+     * @param guild the guild of the vaults
+     * @return the vaults as a string
+     */
+    public static String stringGuildVault(Guild guild) {
+        StringBuilder sb = new StringBuilder();
+
+        for (String vault : guild.getVaults()) {
+            sb.append(vault + "//");
+        }
+        return sb.toString();
     }
 }

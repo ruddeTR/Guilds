@@ -22,14 +22,17 @@ public class Queries {
             "  `tier` integer(5) NOT NULL,\n" +
             "  `balance` double NOT NULL,\n" +
             " `members` TEXT NOT NULL,\n" +
-            " `invited-members` TEXT NOT NULL,\n" +
+            " `invited_members` TEXT NOT NULL,\n" +
             " `allies` TEXT NOT NULL,\n" +
-            " `pending-allies` TEXT NOT NULL,\n" +
+            " `pending_allies` TEXT NOT NULL,\n" +
             " `codes` TEXT NOT NULL,\n" +
             " `vaults` TEXT NOT NULL\n" +
             ");";
 
     @Language("MySQL")
-    public static final String ADD_NEW_GUILD = "INSERT IGNORE INTO guilds (id, name, prefix, master, skull, status, tier, balance) VALUES (?,?,?,?,?,?,?,?)";
+    public static final String ADD_NEW_GUILD = "INSERT IGNORE INTO guilds (id, name, prefix, " +
+            "master, home, skull, status, tier, balance, " +
+            "members, invited_members, allies, " +
+            "pending_allies, codes, vaults) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 }
